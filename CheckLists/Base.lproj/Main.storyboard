@@ -105,8 +105,7 @@
                     <navigationItem key="navigationItem" title="Checklists" id="rYY-Ib-Cpa">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="EU7-5a-Nab">
                             <connections>
-                                <action selector="addItem" destination="TTG-1V-g52" id="IDM-7J-yx9"/>
-                                <segue destination="yMp-QN-Z6U" kind="show" id="CP7-MH-ceM"/>
+                                <segue destination="yMp-QN-Z6U" kind="show" identifier="AddItem" id="CP7-MH-ceM"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

@@ -1,5 +1,5 @@
 //
-//  AddItemTableViewController.swift
+//  AddItemViewController.swift
 //  CheckLists
 //
 //  Created by Irma Blanco on 06/05/2018.
@@ -8,16 +8,26 @@
 
 import UIKit
 
+protocol AddItemViewControllerDelegate: class {
+  func addItemViewControllerDidCancel(_ controller: AddItemViewController)
+  func addItemViewController(_ controller: AddItemViewController, didFinishAdding item: ChecklistItem)
+}
+
 class AddItemViewController: UITableViewController, UITextFieldDelegate {
 
+  weak var delegate: AddItemViewControllerDelegate?
+  
   @IBOutlet weak var doneBarButton: UIBarButtonItem!
   @IBOutlet weak var textField: UITextField!
+  
   @IBAction func cancel() {
-    navigationController?.popViewController(animated: true)
+    delegate?.addItemViewControllerDidCancel(self)
   }
   @IBAction func done() {
-    print("Contents of the text field: \(textField.text!)")
-    navigationController?.popViewController(animated: true)
+    let item = ChecklistItem()
+    item.text = textField.text!
+    item.checked = false
+    delegate?.addItemViewController(self, didFinishAdding: item)
   }
   
     override func viewDidLoad() {
