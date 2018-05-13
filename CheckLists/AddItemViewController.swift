@@ -9,13 +9,22 @@
 import UIKit
 
 protocol AddItemViewControllerDelegate: class {
-  func addItemViewControllerDidCancel(_ controller: AddItemViewController)
-  func addItemViewController(_ controller: AddItemViewController, didFinishAdding item: ChecklistItem)
+  func addItemViewControllerDidCancel(
+    _ controller: AddItemViewController)
+  func addItemViewController(
+    _ controller: AddItemViewController,
+    didFinishAdding item: ChecklistItem)
+  func addItemViewController(
+    _ controller: AddItemViewController,
+    didFinishEditing item: ChecklistItem)
 }
+
+
 
 class AddItemViewController: UITableViewController, UITextFieldDelegate {
 
   weak var delegate: AddItemViewControllerDelegate?
+  var itemToEdit: ChecklistItem?
   
   @IBOutlet weak var doneBarButton: UIBarButtonItem!
   @IBOutlet weak var textField: UITextField!
@@ -24,16 +33,29 @@ class AddItemViewController: UITableViewController, UITextFieldDelegate {
     delegate?.addItemViewControllerDidCancel(self)
   }
   @IBAction func done() {
-    let item = ChecklistItem()
-    item.text = textField.text!
-    item.checked = false
-    delegate?.addItemViewController(self, didFinishAdding: item)
+    if let itemToEdit = itemToEdit {
+      itemToEdit.text = textField.text!
+      delegate?.addItemViewController(self, didFinishEditing: itemToEdit)
+    }else{
+      let item = ChecklistItem()
+      item.text = textField.text!
+      item.checked = false
+      delegate?.addItemViewController(self, didFinishAdding: item)
+    }
+  
   }
   
     override func viewDidLoad() {
         super.viewDidLoad()
+      
         textField.becomeFirstResponder()
         navigationItem.largeTitleDisplayMode = .never
+      
+      if let item = itemToEdit {
+        title = "Edit item"
+        textField.text = item.text
+        doneBarButton.isEnabled = true
+      }
 
     }
   
